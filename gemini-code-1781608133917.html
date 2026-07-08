@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mendelian Cross Simulator Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-500 text-white p-2 rounded-lg shadow-md shadow-emerald-500/20">
+                    <i class="fa-solid fa-dna text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">MendoSim</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Mendelian Genetics Cross Simulator</p>
+                </div>
+            </div>
+            
+            <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer">
+                <i id="theme-toggle-icon" class="fa-solid fa-moon text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <section class="lg:col-span-4 space-y-6">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-500"></i> Simulation Setup
+                </h2>
+                <hr class="border-slate-100 dark:border-slate-800 mb-6">
+
+                <form id="sim-form" onsubmit="event.preventDefault();" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Cross Type</label>
+                        <select class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                            <option>Monohybrid Cross (1 Gene)</option>
+                            <option>Dihybrid Cross (2 Genes)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Parent 1 Genotype (Maternal)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <select class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                                <option>A</option>
+                                <option>a</option>
+                            </select>
+                            <select class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                                <option>a</option>
+                                <option>A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Parent 2 Genotype (Paternal)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <select class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                                <option>A</option>
+                                <option>a</option>
+                            </select>
+                            <select class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                                <option>A</option>
+                                <option>a</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Offspring Generation Size</label>
+                        <input type="range" min="100" max="2000" value="1000" step="100" id="sample-range" class="w-full accent-emerald-500 cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1">
+                            <span>100</span>
+                            <span id="range-val" class="text-emerald-500 font-semibold">1000 offspring</span>
+                            <span>2000</span>
+                        </div>
+                    </div>
+
+                    <button type="button" id="simulate-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-play text-xs"></i> Run Genetic Simulation
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 text-xs space-y-2 text-slate-500 dark:text-slate-400">
+                <p class="font-semibold text-slate-700 dark:text-slate-300">Quick Guide:</p>
+                <p>• <strong>Capital letters (A)</strong> represent Dominant alleles.</p>
+                <p>• <strong>Lowercase letters (a)</strong> represent Recessive alleles.</p>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8 space-y-6">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Population</p>
+                    <p class="text-2xl font-bold mt-1 text-slate-800 dark:text-slate-100" id="stat-total">1,000</p>
+                    <span class="text-[11px] text-emerald-500 font-medium bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-full mt-2 inline-block">Simulated Successfully</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Dominant Phenotype Ratio</p>
+                    <p class="text-2xl font-bold mt-1 text-slate-800 dark:text-slate-100" id="stat-dom-ratio">74.8%</p>
+                    <span class="text-[11px] text-slate-400 mt-2 inline-block">Expected: 75% (3:1)</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Chi-Square (χ²)</p>
+                    <p class="text-2xl font-bold mt-1 text-slate-800 dark:text-slate-100" id="stat-chi">0.053</p>
+                    <span class="text-[11px] text-indigo-500 font-medium bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-full mt-2 inline-block">p > 0.05 (Valid)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                
+                <div class="md:col-span-5 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-colors duration-300">
+                    <div>
+                        <h3 class="text-md font-semibold mb-1">Punnett Square Matrix</h3>
+                        <p class="text-xs text-slate-400 mb-6">Theoretical gamete combinations</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 max-w-[240px] mx-auto w-full aspect-square items-center justify-items-center">
+                        <div></div>
+                        <div class="font-bold text-emerald-500 text-lg" id="gamete-p2-1">A</div>
+                        <div class="font-bold text-emerald-500 text-lg" id="gamete-p2-2">a</div>
+
+                        <div class="font-bold text-indigo-500 text-lg" id="gamete-p1-1">A</div>
+                        <div class="w-full aspect-square flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-md text-slate-700 dark:text-slate-200" id="cell-1">AA</span>
+                            <span class="text-[10px] text-slate-400">25%</span>
+                        </div>
+                        <div class="w-full aspect-square flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-md text-slate-700 dark:text-slate-200" id="cell-2">Aa</span>
+                            <span class="text-[10px] text-slate-400">25%</span>
+                        </div>
+
+                        <div class="font-bold text-indigo-500 text-lg" id="gamete-p1-2">a</div>
+                        <div class="w-full aspect-square flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-md text-slate-700 dark:text-slate-200" id="cell-3">Aa</span>
+                            <span class="text-[10px] text-slate-400">25%</span>
+                        </div>
+                        <div class="w-full aspect-square flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-md text-slate-700 dark:text-slate-200" id="cell-4">aa</span>
+                            <span class="text-[10px] text-slate-400">25%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="text-[11px] text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i> Click run to see random generation deviations</span>
+                    </div>
+                </div>
+
+                <div class="md:col-span-7 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-colors duration-300">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-semibold">Statistical Breakdown</h3>
+                            <div class="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg text-xs">
+                                <button id="btn-chart-pheno" class="px-3 py-1 bg-white dark:bg-slate-700 rounded-md shadow-xs font-medium cursor-pointer">Phenotype</button>
+                                <button id="btn-chart-geno" class="px-3 py-1 text-slate-500 dark:text-slate-400 cursor-pointer">Genotype</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="analyticsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
+                <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                    <h3 class="text-md font-semibold">Phenotype & Genotype Distrubution Logs</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 text-xs tracking-wider uppercase">
+                            <tr>
+                                <th class="px-6 py-3 font-medium">Classification</th>
+                                <th class="px-6 py-3 font-medium">Observed Count</th>
+                                <th class="px-6 py-3 font-medium">Observed %</th>
+                                <th class="px-6 py-3 font-medium">Expected %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="table-body">
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                                <td class="px-6 py-4 font-medium">Dominant Expression (A_)</td>
+                                <td class="px-6 py-4" id="table-obs-dom">748</td>
+                                <td class="px-6 py-4" id="table-pct-dom">74.8%</td>
+                                <td class="px-6 py-4 text-slate-400">75.0%</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                                <td class="px-6 py-4 font-medium">Recessive Expression (aa)</td>
+                                <td class="px-6 py-4" id="table-obs-rec">252</td>
+                                <td class="px-6 py-4" id="table-pct-rec">25.2%</td>
+                                <td class="px-6 py-4 text-slate-400">25.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="text-center py-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-400 mt-12">
+        Mendelian Cross Simulator UI Template • Built with Tailwind CSS & Chart.js
+    </footer>
+
+    <script>
+        // 1. Theme (Dark/Light Mode) Handling
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleIcon = document.getElementById('theme-toggle-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                themeToggleIcon.className = 'fa-solid fa-sun text-lg';
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                themeToggleIcon.className = 'fa-solid fa-moon text-lg';
+                localStorage.setItem('theme', 'dark');
+            }
+            updateChartTheme();
+        });
+
+        // Sync Range Input UI text
+        const sampleRange = document.getElementById('sample-range');
+        const rangeVal = document.getElementById('range-val');
+        sampleRange.addEventListener('input', (e) => {
+            rangeVal.innerText = `${e.target.value} offspring`;
+        });
+
+        // 2. Chart.js Initialization & Configuration
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        
+        let currentView = 'pheno'; // 'pheno' or 'geno'
+        
+        // Mock dataset generators to keep UI interactive without messy backend math logic
+        const getMockData = (size, type) => {
+            if (type === 'pheno') {
+                const dev = (Math.random() - 0.5) * 40; // Simulated sample deviation
+                const dom = Math.round(size * 0.75 + dev);
+                const rec = size - dom;
+                return {
+                    labels: ['Dominant Phenotype (A_)', 'Recessive Phenotype (aa)'],
+                    data: [dom, rec],
+                    colors: ['#10b981', '#6366f1']
+                };
+            } else {
+                const dev1 = (Math.random() - 0.5) * 20;
+                const dev2 = (Math.random() - 0.5) * 20;
+                const aa = Math.round(size * 0.25 + dev1);
+                const Aa = Math.round(size * 0.50 + dev2);
+                const rec = size - (aa + Aa);
+                return {
+                    labels: ['Homozygous Dom (AA)', 'Heterozygous (Aa)', 'Homozygous Rec (aa)'],
+                    data: [aa, Aa, rec],
+                    colors: ['#10b981', '#34d399', '#6366f1']
+                };
+            }
+        };
+
+        let activeData = getMockData(parseInt(sampleRange.value), currentView);
+
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: activeData.labels,
+                datasets: [{
+                    data: activeData.data,
+                    backgroundColor: activeData.colors,
+                    borderRadius: 8,
+                    borderWidth: 0,
+                    maxBarThickness: 50
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: htmlElement.classList.contains('dark') ? '#94a3b8' : '#64748b' }
+                    },
+                    y: {
+                        grid: { color: htmlElement.classList.contains('dark') ? '#334155' : '#e2e8f0' },
+                        ticks: { color: htmlElement.classList.contains('dark') ? '#94a3b8' : '#64748b' }
+                    }
+                }
+            }
+        });
+
+        function updateChartTheme() {
+            const isDark = htmlElement.classList.contains('dark');
+            chart.options.scales.x.ticks.color = isDark ? '#94a3b8' : '#64748b';
+            chart.options.scales.y.ticks.color = isDark ? '#94a3b8' : '#64748b';
+            chart.options.scales.y.grid.color = isDark ? '#334155' : '#e2e8f0';
+            chart.update();
+        }
+
+        // 3. Simulation Control Interactivity
+        const simulateBtn = document.getElementById('simulate-btn');
+        
+        simulateBtn.addEventListener('click', () => {
+            // UI Trigger visual response loading animation
+            simulateBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Processing...`;
+            simulateBtn.disabled = true;
+
+            setTimeout(() => {
+                const totalSize = parseInt(sampleRange.value);
+                activeData = getMockData(totalSize, currentView);
+                
+                // Update top statistics dashboard
+                document.getElementById('stat-total').innerText = totalSize.toLocaleString();
+                
+                if (currentView === 'pheno') {
+                    const domPct = ((activeData.data[0] / totalSize) * 100).toFixed(1);
+                    document.getElementById('stat-dom-ratio').innerText = `${domPct}%`;
+                    
+                    // Update table UI elements directly
+                    document.getElementById('table-obs-dom').innerText = activeData.data[0].toLocaleString();
+                    document.getElementById('table-pct-dom').innerText = `${domPct}%`;
+                    document.getElementById('table-obs-rec').innerText = activeData.data[1].toLocaleString();
+                    document.getElementById('table-pct-rec').innerText = `${((activeData.data[1] / totalSize) * 100).toFixed(1)}%`;
+                } else {
+                    const domPct = (((activeData.data[0] + activeData.data[1]) / totalSize) * 100).toFixed(1);
+                    document.getElementById('stat-dom-ratio').innerText = `${domPct}%`;
+                }
+
+                // Randomize Chi-Square metric for realistic dashboard visual variation
+                document.getElementById('stat-chi').innerText = (Math.random() * 0.3).toFixed(3);
+
+                // Update Visual Chart
+                chart.data.labels = activeData.labels;
+                chart.data.datasets[0].data = activeData.data;
+                chart.data.datasets[0].backgroundColor = activeData.colors;
+                chart.update();
+
+                // Reset Button UI State
+                simulateBtn.innerHTML = `<i class="fa-solid fa-play text-xs"></i> Run Genetic Simulation`;
+                simulateBtn.disabled = false;
+            }, 400);
+        });
+
+        // Chart sub-tabs visibility selection toggle handling
+        const btnPheno = document.getElementById('btn-chart-pheno');
+        const btnGeno = document.getElementById('btn-chart-geno');
+        const tableBody = document.getElementById('table-body');
+
+        function switchTab(view) {
+            currentView = view;
+            const totalSize = parseInt(sampleRange.value);
+            activeData = getMockData(totalSize, currentView);
+
+            chart.data.labels = activeData.labels;
+            chart.data.datasets[0].data = activeData.data;
+            chart.data.datasets[0].backgroundColor = activeData.colors;
+            chart.update();
+
+            if(view === 'pheno') {
+                btnPheno.className = "px-3 py-1 bg-white dark:bg-slate-700 rounded-md shadow-xs font-medium cursor-pointer text-slate-900 dark:text-slate-50";
+                btnGeno.className = "px-3 py-1 text-slate-500 dark:text-slate-400 cursor-pointer";
+                
+                // Rewrite logs table matrix configuration to fit Phenotypes
+                tableBody.innerHTML = `
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td class="px-6 py-4 font-medium">Dominant Expression (A_)</td>
+                        <td class="px-6 py-4" id="table-obs-dom">${activeData.data[0]}</td>
+                        <td class="px-6 py-4" id="table-pct-dom">${((activeData.data[0]/totalSize)*100).toFixed(1)}%</td>
+                        <td class="px-6 py-4 text-slate-400">75.0%</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td class="px-6 py-4 font-medium">Recessive Expression (aa)</td>
+                        <td class="px-6 py-4" id="table-obs-rec">${activeData.data[1]}</td>
+                        <td class="px-6 py-4" id="table-pct-rec">${((activeData.data[1]/totalSize)*100).toFixed(1)}%</td>
+                        <td class="px-6 py-4 text-slate-400">25.0%</td>
+                    </tr>`;
+            } else {
+                btnGeno.className = "px-3 py-1 bg-white dark:bg-slate-700 rounded-md shadow-xs font-medium cursor-pointer text-slate-900 dark:text-slate-50";
+                btnPheno.className = "px-3 py-1 text-slate-500 dark:text-slate-400 cursor-pointer";
+                
+                // Rewrite logs table matrix configuration to fit Genotypes
+                tableBody.innerHTML = `
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td class="px-6 py-4 font-medium">Homozygous Dominant (AA)</td>
+                        <td class="px-6 py-4">${activeData.data[0]}</td>
+                        <td class="px-6 py-4">${((activeData.data[0]/totalSize)*100).toFixed(1)}%</td>
+                        <td class="px-6 py-4 text-slate-400">25.0%</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td class="px-6 py-4 font-medium">Heterozygous (Aa)</td>
+                        <td class="px-6 py-4">${activeData.data[1]}</td>
+                        <td class="px-6 py-4">${((activeData.data[1]/totalSize)*100).toFixed(1)}%</td>
+                        <td class="px-6 py-4 text-slate-400">50.0%</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td class="px-6 py-4 font-medium">Homozygous Recessive (aa)</td>
+                        <td class="px-6 py-4">${activeData.data[2]}</td>
+                        <td class="px-6 py-4">${((activeData.data[2]/totalSize)*100).toFixed(1)}%</td>
+                        <td class="px-6 py-4 text-slate-400">25.0%</td>
+                    </tr>`;
+            }
+        }
+
+        btnPheno.addEventListener('click', () => switchTab('pheno'));
+        btnGeno.addEventListener('click', () => switchTab('geno'));
+
+    </script>
+</body>
+</html>

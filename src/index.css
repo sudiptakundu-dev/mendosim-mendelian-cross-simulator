@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+    /* Text colors */
+    --text-primary: rgb(26, 26, 26);
+    --text-secondary: rgb(50, 50, 50);
+    --text-muted: rgb(80, 80, 80);
+
+    /* Background colors */
+    --bg-body: rgb(200, 200, 200);
+    --bg-card: rgb(237, 237, 237);
+    --bg-input: rgb(220, 220, 220);
+
+    /* Border colors */
+    --border: rgb(170, 170, 170);
+
+    /* Shadow */
+    --shadow: rgb(180, 180, 180);
+}
+
+.dark {
+    /* Text colors */
+    --text-primary: rgb(237, 237, 237);
+    --text-secondary: rgb(220, 220, 220);
+    --text-muted: rgb(200, 200, 200);
+
+    /* Background colors */
+    --bg-body: rgb(26, 26, 26);
+    --bg-card: rgb(50, 50, 50);
+    --bg-input: rgb(80, 80, 80);
+
+    /* Border colors */
+    --border: rgb(100, 100, 100);
+
+    /* Shadow */
+    --shadow: rgb(10, 10, 10);
+}
+
+*,
+*::before,
+*::after {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    opacity 300ms ease;
+}
+
+body {
+    background: var(--bg-body);
+}
+
+/* Chrome, Edge, Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-card);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg-card);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
