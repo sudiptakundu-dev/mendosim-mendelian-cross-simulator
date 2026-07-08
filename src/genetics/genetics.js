@@ -112,15 +112,39 @@ class MendelianCrossSimulator {
     }
 
     run() {
+        // Grand Total Timer for the entire process
+        console.time("🚀 GRAND TOTAL SIMULATION TIME");
+
+        // 1. Measure Gamete Generation
+        console.time("  ↳ Step 1: generateGametes()");
         this.generateGametes();
+        console.timeEnd("  ↳ Step 1: generateGametes()");
+
+        // 2. Measure Offspring Simulation (The 1 Million Loop)
+        console.time("  ↳ Step 2: simulateOffspring() 🧵");
         this.simulateOffspring();
+        console.timeEnd("  ↳ Step 2: simulateOffspring() 🧵");
+
+        // 3. Measure Genotype Counting
+        console.time("  ↳ Step 3: countGenotypes() 📊");
         this.countGenotypes();
+        console.timeEnd("  ↳ Step 3: countGenotypes() 📊");
+
+        // 4. Measure Phenotype Counting
+        console.time("  ↳ Step 4: countPhenotypes() 🧪");
         this.countPhenotypes();
+        console.timeEnd("  ↳ Step 4: countPhenotypes() 🧪");
+
+        // End Grand Total
+        console.log("-----------------------------------------");
+        console.timeEnd("🚀 GRAND TOTAL SIMULATION TIME");
     }
 }
 
 export default MendelianCrossSimulator;
 
+
+// Valid input for this engine is like the following:
 // const simulationData = {
 //   crossType: "4",
 //   offspringCount: 5000,

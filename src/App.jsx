@@ -56,7 +56,7 @@ useEffect(() => {
     const num = Number(value);
 
     if (isNaN(num)) return;
-    if (num < 1 || num > 10000) return;
+    if (num < 1 || num > 1000000) return;
 
     setSimulationData((prev) => ({
       ...prev,
