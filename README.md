@@ -33,7 +33,7 @@ MendoSim is an interactive genetics simulator that models Mendelian inheritance 
 
 <!-- Place demo.gif here — a short screen recording showing a cross being configured, simulated, and the resulting charts/tables appearing -->
 <div align="center">
-  <img src="./assets/demo.gif" alt="MendoSim Demo" width="850">
+  <img src="./src/assets/demo.gif" alt="MendoSim Demo" width="850">
 </div>
 
 ---
@@ -42,7 +42,7 @@ MendoSim is an interactive genetics simulator that models Mendelian inheritance 
 
 <!-- Screenshot: dashboard.png — main dashboard showing cross configuration (parent genotypes, number of offspring, dominance settings) -->
 <div align="center">
-  <img src="./assets/dashboard.png" alt="Dashboard" width="800"><br>
+  <img src="./src/assets/dashboard.png" alt="Dashboard" width="800"><br>
   <sub><b>Main Dashboard</b> — configure parental genotypes and simulation parameters</sub>
 </div>
 
@@ -50,7 +50,7 @@ MendoSim is an interactive genetics simulator that models Mendelian inheritance 
 
 <!-- Screenshot: results.png — statistical results table showing genotype/phenotype counts and ratios -->
 <div align="center">
-  <img src="./assets/results.png" alt="Results Table" width="800"><br>
+  <img src="./src/assets/results.png" alt="Results Table" width="800"><br>
   <sub><b>Statistical Results</b> — genotype and phenotype frequency breakdown</sub>
 </div>
 
@@ -58,7 +58,7 @@ MendoSim is an interactive genetics simulator that models Mendelian inheritance 
 
 <!-- Screenshot: charts.png — interactive Chart.js bar/pie charts of simulation output -->
 <div align="center">
-  <img src="./assets/charts.png" alt="Interactive Charts" width="800"><br>
+  <img src="./src/assets/charts.png" alt="Interactive Charts" width="800"><br>
   <sub><b>Interactive Charts</b> — visualizing simulated offspring distributions</sub>
 </div>
 
@@ -66,7 +66,7 @@ MendoSim is an interactive genetics simulator that models Mendelian inheritance 
 
 <!-- Screenshot: dark-mode.png — the dashboard in dark mode -->
 <div align="center">
-  <img src="./assets/dark-mode.png" alt="Dark Mode" width="800"><br>
+  <img src="./src/assets/dark-mode.png" alt="Dark Mode" width="800"><br>
   <sub><b>Dark Mode</b> — full dashboard theming support</sub>
 </div>
 
