@@ -86,12 +86,12 @@ function App() {
             onCrossTypeChange={handleCrossTypeChange}
             onOffspringCountChange={handleOffspringCountChange}
             onRunSimulation={handleRunSimulation}
-            className="w-full lg:w-100 lg:overflow-y-auto lg:custom-scrollbar"
+            className="w-full lg:w-100 lg:overflow-y-auto custom-scrollbar"
           />
         </div>
 
         {/* Output */}
-        <div className="w-full flex-1 flex flex-col lg:min-h-0 lg:overflow-y-auto lg:custom-scrollbar">
+        <div className="w-full flex-1 flex flex-col lg:min-h-0 lg:overflow-y-auto custom-scrollbar">
           <div className="flex flex-col gap-4 m-4 lg:ml-0">
             <Card className={`h-64 sm:h-70 ${showCards ? "opacity-100" : "opacity-0"}`}>
               <BarChart title="Genotype" stats={genotypeStats} isDark={theme === "dark"} />
